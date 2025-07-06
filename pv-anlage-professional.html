@@ -1,0 +1,2755 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PV-Anlage 850 kWp - Wirtschaftlichkeitsanalyse Küsten-Hotel</title>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        
+        @page {
+            size: A4;
+            margin: 12mm;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #0891b2;
+            --success: #059669;
+            --warning: #dc2626;
+            --danger: #ef4444;
+            --dark: #111827;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --radius: 8px;
+            --radius-lg: 12px;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--gray-900);
+            background: var(--gray-50);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            padding-top: 0;
+        }
+        
+        /* Navigation Tabs */
+        .tab-navigation {
+            background: var(--dark);
+            display: flex;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tab-navigation::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .tab-button {
+            flex: 0 0 auto;
+            padding: 20px 32px;
+            background: none;
+            border: none;
+            color: var(--gray-400);
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            white-space: nowrap;
+            border-bottom: 3px solid transparent;
+        }
+        
+        .tab-button:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .tab-button.active {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+            border-bottom-color: var(--primary);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--gray-900) 0%, var(--gray-800) 100%);
+            padding: 48px 32px;
+            color: white;
+        }
+        
+        .header h1 {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            letter-spacing: -0.025em;
+        }
+        
+        .header .subtitle {
+            font-size: 18px;
+            color: var(--gray-300);
+            font-weight: 400;
+        }
+        
+        .header .specs {
+            font-size: 14px;
+            color: var(--gray-400);
+            margin-top: 8px;
+        }
+        
+        /* Content */
+        .content {
+            padding: 32px;
+        }
+        
+        /* Cards */
+        .card {
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--gray-200);
+        }
+        
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gray-100);
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: var(--primary);
+        }
+        
+        .card-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+        
+        /* Form Grid */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-label {
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 6px;
+            font-size: 13px;
+        }
+        
+        .form-input,
+        .form-select {
+            padding: 10px 14px;
+            border: 1px solid var(--gray-300);
+            border-radius: var(--radius);
+            font-size: 14px;
+            font-family: inherit;
+            outline: none;
+            transition: all 0.2s;
+            background: white;
+        }
+        
+        .form-input:focus,
+        .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        
+        .form-input[readonly] {
+            background: var(--gray-50);
+            color: var(--gray-600);
+        }
+        
+        .form-hint {
+            font-size: 12px;
+            color: var(--gray-500);
+            margin-top: 4px;
+        }
+        
+        /* Static Value Display */
+        .static-value {
+            padding: 10px 14px;
+            background: var(--gray-50);
+            border-radius: var(--radius);
+            font-weight: 600;
+            color: var(--gray-700);
+        }
+        
+        /* Cost Comparison */
+        .cost-comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+        
+        .cost-card {
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+        
+        .cost-card-header {
+            padding: 20px 24px;
+            font-weight: 700;
+            font-size: 18px;
+            color: white;
+            text-align: center;
+        }
+        
+        .standard-case .cost-card-header {
+            background: var(--primary);
+        }
+        
+        .worst-case .cost-card-header {
+            background: var(--danger);
+        }
+        
+        .cost-table {
+            padding: 0;
+        }
+        
+        .cost-table table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        
+        .cost-table td {
+            padding: 12px 24px;
+            border-bottom: 1px solid var(--gray-100);
+        }
+        
+        .cost-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .cost-table tr:hover {
+            background: var(--gray-50);
+        }
+        
+        .price {
+            text-align: right;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+        
+        .price.updated {
+            color: var(--success);
+        }
+        
+        .cost-summary {
+            padding: 24px;
+            text-align: center;
+            background: var(--gray-50);
+            border-top: 1px solid var(--gray-200);
+        }
+        
+        .cost-total {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--gray-900);
+            margin-bottom: 4px;
+        }
+        
+        .cost-per-kwp {
+            font-size: 14px;
+            color: var(--gray-600);
+            font-weight: 500;
+        }
+        
+        /* Results Grid */
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+            margin: 24px 0;
+        }
+        
+        .result-card {
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+            padding: 20px;
+            border-radius: var(--radius);
+            text-align: center;
+        }
+        
+        .result-card.primary {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .result-card.success {
+            background: var(--success);
+            color: white;
+            border-color: var(--success);
+        }
+        
+        .result-label {
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            opacity: 0.8;
+        }
+        
+        .result-value {
+            font-size: 24px;
+            font-weight: 800;
+        }
+        
+        /* Overview Grid */
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+        
+        .overview-card {
+            background: white;
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            text-align: center;
+        }
+        
+        .overview-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--gray-600);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .overview-amount {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+        
+        .overview-detail {
+            font-size: 14px;
+            color: var(--gray-600);
+        }
+        
+        /* Info Boxes */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+            margin: 24px 0;
+        }
+        
+        .info-box {
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+        }
+        
+        .info-box.primary {
+            background: rgba(37, 99, 235, 0.05);
+            border-color: rgba(37, 99, 235, 0.2);
+        }
+        
+        .info-box.warning {
+            background: rgba(239, 68, 68, 0.05);
+            border-color: rgba(239, 68, 68, 0.2);
+        }
+        
+        .info-box.success {
+            background: rgba(5, 150, 105, 0.05);
+            border-color: rgba(5, 150, 105, 0.2);
+        }
+        
+        .info-box h4 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--gray-900);
+        }
+        
+        .info-list {
+            list-style: none;
+        }
+        
+        .info-list li {
+            margin-bottom: 10px;
+            font-size: 14px;
+            line-height: 1.5;
+            color: var(--gray-700);
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .info-list li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-weight: bold;
+        }
+        
+        .info-list li strong {
+            color: var(--gray-900);
+        }
+        
+        /* Alert Banner */
+        .alert {
+            padding: 16px 20px;
+            border-radius: var(--radius);
+            margin-bottom: 24px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        
+        .alert-warning {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            color: var(--gray-800);
+        }
+        
+        .alert-icon {
+            flex-shrink: 0;
+            font-size: 20px;
+        }
+        
+        .alert-content h3 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        
+        .alert-content p {
+            font-size: 14px;
+            color: var(--gray-700);
+        }
+        
+        /* Chart Container */
+        .chart-container {
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        
+        .chart-header {
+            margin-bottom: 20px;
+        }
+        
+        .chart-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 4px;
+        }
+        
+        .chart-subtitle {
+            font-size: 14px;
+            color: var(--gray-600);
+        }
+        
+        .chart-content {
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Financing Scenarios */
+        .financing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+        
+        .financing-card {
+            background: white;
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            text-align: center;
+            transition: all 0.2s;
+        }
+        
+        .financing-card:hover {
+            border-color: var(--primary);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .financing-card.recommended {
+            border-color: var(--primary);
+            background: rgba(37, 99, 235, 0.02);
+        }
+        
+        .financing-type {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 16px;
+        }
+        
+        .financing-investment {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+        
+        .financing-label {
+            font-size: 14px;
+            color: var(--gray-600);
+            margin-bottom: 20px;
+        }
+        
+        .financing-metrics {
+            display: flex;
+            justify-content: space-around;
+            padding-top: 20px;
+            border-top: 1px solid var(--gray-200);
+        }
+        
+        .financing-metric {
+            text-align: center;
+        }
+        
+        .metric-label {
+            font-size: 12px;
+            color: var(--gray-600);
+            margin-bottom: 4px;
+        }
+        
+        .metric-value {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+        
+        /* Bonus Box */
+        .bonus-box {
+            background: linear-gradient(135deg, var(--warning) 0%, var(--danger) 100%);
+            color: white;
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            margin: 32px 0;
+            text-align: center;
+            box-shadow: var(--shadow-xl);
+        }
+        
+        .bonus-content {
+            background: white;
+            color: var(--gray-900);
+            border-radius: var(--radius);
+            padding: 24px;
+        }
+        
+        .bonus-title {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .bonus-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .bonus-item {
+            text-align: center;
+        }
+        
+        .bonus-label {
+            font-size: 14px;
+            color: var(--gray-600);
+            margin-bottom: 8px;
+        }
+        
+        .bonus-value {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--danger);
+        }
+        
+        .bonus-description {
+            font-size: 16px;
+            color: var(--gray-700);
+            margin-top: 16px;
+        }
+        
+        /* Recommendation Box */
+        .recommendation-box {
+            background: rgba(37, 99, 235, 0.05);
+            border: 2px solid rgba(37, 99, 235, 0.2);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            margin: 24px 0;
+        }
+        
+        .recommendation-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 16px;
+            text-align: center;
+        }
+        
+        .recommendation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+        }
+        
+        .recommendation-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            font-size: 14px;
+            color: var(--gray-700);
+        }
+        
+        .recommendation-icon {
+            color: var(--success);
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        
+        /* Checklist */
+        .checklist-container {
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+        }
+        
+        .checklist-progress {
+            background: var(--gray-50);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--gray-200);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 12px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+        
+        .checklist-section {
+            margin-bottom: 32px;
+        }
+        
+        .checklist-section h4 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--gray-200);
+        }
+        
+        .checklist-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 12px;
+            padding: 12px;
+            background: var(--gray-50);
+            border-radius: var(--radius);
+            transition: all 0.2s ease;
+        }
+        
+        .checklist-item:hover {
+            background: var(--gray-100);
+        }
+        
+        .checklist-checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--gray-400);
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        
+        .checklist-checkbox.checked {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+        
+        .checklist-checkbox:hover {
+            border-color: var(--primary);
+        }
+        
+        .checklist-content {
+            flex: 1;
+        }
+        
+        .checklist-title {
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 4px;
+            font-size: 14px;
+        }
+        
+        .checklist-description {
+            color: var(--gray-600);
+            font-size: 13px;
+            line-height: 1.4;
+        }
+        
+        /* Admin Modal */
+        .admin-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.75);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .admin-modal.show {
+            display: flex;
+        }
+        
+        .admin-modal-content {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            text-align: center;
+            box-shadow: var(--shadow-xl);
+            max-width: 400px;
+            width: 90%;
+        }
+        
+        .admin-modal h3 {
+            color: var(--gray-900);
+            margin-bottom: 16px;
+            font-size: 20px;
+            font-weight: 700;
+        }
+        
+        .admin-modal p {
+            color: var(--gray-600);
+            margin-bottom: 20px;
+        }
+        
+        .admin-modal input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--gray-300);
+            border-radius: var(--radius);
+            font-size: 16px;
+            text-align: center;
+            margin-bottom: 20px;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+        
+        .admin-modal input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        
+        .admin-modal-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: var(--radius);
+            font-family: inherit;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 14px;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+        
+        .btn-secondary {
+            background: var(--gray-200);
+            color: var(--gray-700);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--gray-300);
+        }
+        
+        /* Profit Calculator */
+        .profit-calculator {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            padding: 32px;
+            position: relative;
+            overflow: hidden;
+            display: none;
+            color: white;
+        }
+        
+        .profit-calculator-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .profit-calculator-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        
+        .profit-calculator h2 {
+            font-size: 24px;
+            font-weight: 800;
+            color: white;
+        }
+        
+        .close-profit-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            font-size: 14px;
+        }
+        
+        .close-profit-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .profit-input-group {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+        }
+        
+        .profit-input-group label {
+            font-weight: 600;
+            font-size: 16px;
+        }
+        
+        .profit-input {
+            padding: 12px 20px;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 16px;
+            font-weight: 600;
+            width: 120px;
+            text-align: center;
+            outline: none;
+            background: white;
+            color: var(--gray-900);
+        }
+        
+        .profit-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .profit-info-item {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: var(--radius);
+            text-align: center;
+        }
+        
+        .profit-info-item h4 {
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .profit-info-item .value {
+            font-size: 24px;
+            font-weight: 800;
+        }
+        
+        /* Footer */
+        .footer {
+            background: var(--gray-800);
+            color: var(--gray-400);
+            padding: 24px 32px;
+            text-align: center;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .container {
+                max-width: 100%;
+            }
+            
+            .header {
+                padding: 32px 24px;
+            }
+            
+            .content {
+                padding: 24px;
+            }
+            
+            .cost-comparison {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+            
+            .financing-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .header .subtitle {
+                font-size: 16px;
+            }
+            
+            .tab-button {
+                padding: 16px 20px;
+                font-size: 14px;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+            
+            .card-title {
+                font-size: 18px;
+            }
+            
+            .results-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+            
+            .result-value {
+                font-size: 20px;
+            }
+            
+            .overview-amount {
+                font-size: 28px;
+            }
+            
+            .bonus-value {
+                font-size: 28px;
+            }
+            
+            .cost-table td {
+                padding: 10px 16px;
+                font-size: 13px;
+            }
+            
+            .chart-content {
+                height: 300px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .header {
+                padding: 24px 16px;
+            }
+            
+            .content {
+                padding: 16px;
+            }
+            
+            .header h1 {
+                font-size: 20px;
+            }
+            
+            .header .subtitle {
+                font-size: 14px;
+            }
+            
+            .tab-navigation {
+                position: relative; /* Nicht sticky auf Mobile */
+                flex-direction: column;
+            }
+            
+            .tab-button {
+                padding: 14px 16px;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                border-left: 3px solid transparent;
+            }
+            
+            .tab-button.active {
+                border-bottom-color: transparent;
+                border-left-color: var(--primary);
+            }
+            
+            .card {
+                padding: 16px;
+                margin-bottom: 16px;
+            }
+            
+            .card-header {
+                gap: 12px;
+                margin-bottom: 16px;
+                padding-bottom: 12px;
+            }
+            
+            .card-icon {
+                width: 32px;
+                height: 32px;
+                font-size: 16px;
+            }
+            
+            .card-title {
+                font-size: 16px;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            
+            .results-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            
+            .overview-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            
+            .cost-card-header {
+                padding: 16px;
+                font-size: 16px;
+            }
+            
+            .cost-table td {
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+            
+            .cost-total {
+                font-size: 24px;
+            }
+            
+            .bonus-box {
+                padding: 24px 16px;
+            }
+            
+            .bonus-title {
+                font-size: 20px;
+            }
+            
+            .bonus-value {
+                font-size: 24px;
+            }
+            
+            .financing-card {
+                padding: 20px;
+            }
+            
+            .financing-investment {
+                font-size: 24px;
+            }
+            
+            .admin-modal-content {
+                padding: 24px;
+                margin: 16px;
+            }
+            
+            .profit-calculator {
+                padding: 24px 16px;
+            }
+            
+            .profit-input-group {
+                flex-direction: column;
+                gap: 12px;
+            }
+            
+            .profit-input {
+                width: 100%;
+                max-width: 200px;
+            }
+        }
+        
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+            }
+            
+            .container {
+                box-shadow: none;
+            }
+            
+            .profit-calculator,
+            .tab-navigation,
+            .admin-modal {
+                display: none !important;
+            }
+            
+            .tab-content {
+                display: block !important;
+            }
+            
+            .card {
+                page-break-inside: avoid;
+            }
+            
+            .chart-container {
+                page-break-inside: avoid;
+            }
+        }
+        
+        /* Utility Classes */
+        .text-center {
+            text-align: center;
+        }
+        
+        .mt-4 {
+            margin-top: 16px;
+        }
+        
+        .mb-4 {
+            margin-bottom: 16px;
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="tab-navigation">
+            <button class="tab-button active" onclick="switchTab('costs')">
+                Kostenaufstellung
+            </button>
+            <button class="tab-button" onclick="switchTab('analysis')">
+                Wirtschaftlichkeitsanalyse
+            </button>
+            <button class="tab-button" onclick="switchTab('amortization')">
+                Amortisationsrechnung
+            </button>
+            <button class="tab-button" onclick="switchTab('normen')">
+                Normen & Compliance
+            </button>
+        </div>
+
+        <!-- Tab 1: Kostenaufstellung -->
+        <div id="costs-tab" class="tab-content active">
+            <div class="profit-calculator" id="profit-calculator">
+                <div class="profit-calculator-content">
+                    <div class="profit-calculator-header">
+                        <h2>Gewinn-Kalkulator</h2>
+                        <div style="display: flex; gap: 12px;">
+                            <button class="close-profit-btn" onclick="clearProfit()" style="background: rgba(239, 68, 68, 0.2);">Gewinn löschen</button>
+                            <button class="close-profit-btn" onclick="hideProfitCalculator()">Schließen</button>
+                        </div>
+                    </div>
+
+                    <div class="profit-input-group">
+                        <label for="profit">Gewinn pro kWp:</label>
+                        <input type="number" id="profit" class="profit-input" placeholder="0" min="0" step="1">
+                        <span>€/kWp</span>
+                    </div>
+                    
+                    <div class="profit-info">
+                        <div class="profit-info-item">
+                            <h4>Gesamt-Gewinn</h4>
+                            <div class="value" id="total-profit">0 €</div>
+                        </div>
+                        <div class="profit-info-item">
+                            <h4>Gewinn-Prozent</h4>
+                            <div class="value" id="profit-percent">0%</div>
+                        </div>
+                        <div class="profit-info-item">
+                            <h4>Verkaufspreis</h4>
+                            <div class="value" id="selling-price">0 €</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+                            <div class="header">
+                <h1><span style="cursor: pointer; text-decoration: none; transition: color 0.2s; position: relative;" onmouseover="this.style.color='#60a5fa'" onmouseout="this.style.color='inherit'" onclick="showAdminModal()">PV-Anlage<span id="profit-indicator" style="position: absolute; top: -8px; right: -20px; width: 8px; height: 8px; background: #10b981; border-radius: 50%; display: none;"></span></span> Küsten-Hotel 850 kWp</h1>
+                <p class="subtitle">Komplette Kostenaufstellung mit galvanischer Trennung</p>
+                <p class="specs">1.889 Module × 450W | Wismar, Mecklenburg-Vorpommern | Windzone 3</p>
+            </div>
+
+            <div class="content">
+                <div class="alert alert-warning">
+                    <div class="alert-icon">⚠</div>
+                    <div class="alert-content">
+                        <h3>Wichtiger Hinweis zu variablen Kosten</h3>
+                        <p>Die Kosten für Netzanschluss, Statik, Zertifizierung und AC-Montage können erst nach detaillierter Prüfung vor Ort exakt bewertet werden. Die angegebenen Preise sind Richtwerte basierend auf Erfahrungswerten.</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">⚙</div>
+                        <h3 class="card-title">Anlagen-Spezifikationen</h3>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Anlagengröße</label>
+                            <div class="static-value">850 kWp</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Module (Tier-1)</label>
+                            <div class="static-value">1.889 × 450W</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Wechselrichter</label>
+                            <div class="static-value">7 × 125 kW</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Standort</label>
+                            <div class="static-value">Wismar (Windzone 3)</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Besonderheiten</label>
+                            <div class="static-value">Galvanische Trennung</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Dachfläche (geschätzt)</label>
+                            <div class="static-value">~4.250 m²</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cost-comparison">
+                    <div class="cost-card standard-case">
+                        <div class="cost-card-header">Küsten-Standard</div>
+                        <div class="cost-table">
+                            <table>
+                                <tbody>
+                                    <tr><td><strong>Unterkonstruktion (UK)</strong></td><td class="price" data-base="68000">68.000 €</td></tr>
+                                    <tr><td><strong>Module (1.889 × 450W)</strong></td><td class="price" data-base="106250">106.250 €</td></tr>
+                                    <tr><td><strong>Wechselrichter (7×125kW)</strong></td><td class="price" data-base="19600">19.600 €</td></tr>
+                                    <tr><td><strong>DC-Montage</strong></td><td class="price" data-base="59500">59.500 €</td></tr>
+                                    <tr><td><strong>AC-Montage</strong></td><td class="price" data-base="51000">51.000 €</td></tr>
+                                    <tr><td><strong>Kabel & MC4</strong></td><td class="price" data-base="6700">6.700 €</td></tr>
+                                    <tr><td><strong>Metallrohr (gal. Trennung)</strong></td><td class="price" data-base="1500">1.500 €</td></tr>
+                                    <tr><td><strong>Überspannungsschutz SPD</strong></td><td class="price" data-base="2800">2.800 €</td></tr>
+                                    <tr><td><strong>Planung & Statik</strong></td><td class="price" data-base="30250">30.250 €</td></tr>
+                                    <tr><td><strong>Netzanschluss</strong></td><td class="price" data-base="40000">40.000 €</td></tr>
+                                    <tr><td><strong>Zertifizierung</strong></td><td class="price" data-base="15000">15.000 €</td></tr>
+                                    <tr style="background: rgba(37, 99, 235, 0.05);"><td><strong>+ Küsten-Zuschläge</strong></td><td class="price" data-base="20000">20.000 €</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="cost-summary">
+                            <div class="cost-total" id="standard-total">420.600 €</div>
+                            <div class="cost-per-kwp" id="standard-per-kwp">495 € pro kWp</div>
+                        </div>
+                    </div>
+
+                    <div class="cost-card worst-case">
+                        <div class="cost-card-header">Worst Case</div>
+                        <div class="cost-table">
+                            <table>
+                                <tbody>
+                                    <tr><td><strong>Unterkonstruktion (UK)</strong></td><td class="price" data-base="85000">85.000 €</td></tr>
+                                    <tr><td><strong>Module (1.889 × 450W)</strong></td><td class="price" data-base="106250">106.250 €</td></tr>
+                                    <tr><td><strong>Wechselrichter (7×125kW)</strong></td><td class="price" data-base="33600">33.600 €</td></tr>
+                                    <tr><td><strong>DC-Montage</strong></td><td class="price" data-base="83500">83.500 €</td></tr>
+                                    <tr><td><strong>AC-Montage</strong></td><td class="price" data-base="71000">71.000 €</td></tr>
+                                    <tr><td><strong>Kabel & MC4</strong></td><td class="price" data-base="10000">10.000 €</td></tr>
+                                    <tr><td><strong>Metallrohr (gal. Trennung)</strong></td><td class="price" data-base="3000">3.000 €</td></tr>
+                                    <tr><td><strong>Überspannungsschutz SPD</strong></td><td class="price" data-base="4000">4.000 €</td></tr>
+                                    <tr><td><strong>Planung & Statik</strong></td><td class="price" data-base="30250">30.250 €</td></tr>
+                                    <tr><td><strong>Netzanschluss</strong></td><td class="price" data-base="150000">150.000 €</td></tr>
+                                    <tr><td><strong>Zertifizierung</strong></td><td class="price" data-base="15000">15.000 €</td></tr>
+                                    <tr style="background: rgba(239, 68, 68, 0.05);"><td><strong>+ Küsten-Zuschläge</strong></td><td class="price" data-base="35000">35.000 €</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="cost-summary">
+                            <div class="cost-total" id="worst-total">626.600 €</div>
+                            <div class="cost-per-kwp" id="worst-per-kwp">737 € pro kWp</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Kostenvergleich: Standard vs. Worst Case</h3>
+                        <p class="chart-subtitle">Aufschlüsselung der Hauptkostenpositionen</p>
+                    </div>
+                    <div class="chart-content" id="costChart">
+                        <!-- Chart will be generated here -->
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">📊</div>
+                        <h3 class="card-title">Gesamtübersicht</h3>
+                    </div>
+                    
+                    <div class="overview-grid">
+                        <div class="overview-card">
+                            <div class="overview-label">Küsten-Standard</div>
+                            <div class="overview-amount" id="overview-standard">420.600 €</div>
+                            <div class="overview-detail" id="overview-standard-kwp">495 €/kWp</div>
+                        </div>
+                        <div class="overview-card">
+                            <div class="overview-label">Worst Case</div>
+                            <div class="overview-amount" id="overview-worst">626.600 €</div>
+                            <div class="overview-detail" id="overview-worst-kwp">737 €/kWp</div>
+                        </div>
+                        <div class="overview-card">
+                            <div class="overview-label">Kostenspanne</div>
+                            <div class="overview-amount" id="cost-range">206.000 €</div>
+                            <div class="overview-detail">Faktor <span id="cost-factor">1,49</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-grid">
+                    <div class="info-box primary">
+                        <h4>Küsten-spezifische Mehrkosten</h4>
+                        <ul class="info-list">
+                            <li><strong>Ballastierung:</strong> 6.500 € (30-40kg Betonsteine, Zone 3)</li>
+                            <li><strong>Korrosionsschutz:</strong> 5.000 € (VA-Schrauben, salzresistent)</li>
+                            <li><strong>Windgutachten:</strong> 7.000 € (Statisches Zonengutachten)</li>
+                            <li><strong>Randzonenauslegung:</strong> 1.500 € (Mehraufwand Layout)</li>
+                            <li><strong>Galvanische Trennung:</strong> bereits in Basis enthalten</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="info-box warning">
+                        <h4>Variable Kostenfaktoren</h4>
+                        <ul class="info-list">
+                            <li><strong>Netzanschluss:</strong> 110.000 € Differenz (40k - 150k €)</li>
+                            <li><strong>DC-Montage:</strong> 24.000 € Differenz (59,5k - 83,5k €)</li>
+                            <li><strong>AC-Montage:</strong> 20.000 € Differenz (51k - 71k €)</li>
+                            <li><strong>UK + Ballast:</strong> 17.000 € Differenz</li>
+                            <li><strong>Wechselrichter:</strong> 14.000 € Differenz (19,6k - 33,6k €)</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="info-box">
+                        <h4>Handlungsempfehlungen</h4>
+                        <ul class="info-list">
+                            <li><strong>Sofort-Maßnahmen:</strong> Netzanschluss bei WEMAG anfragen</li>
+                            <li><strong>Vor-Ort-Termin:</strong> Zugang, Krantauglichkeit prüfen</li>
+                            <li><strong>Statiker beauftragen:</strong> Windzone 3 + Ballastberechnung</li>
+                            <li><strong>Material bestellen:</strong> VA-Komponenten für Salzluft</li>
+                            <li><strong>Galv. Trennung:</strong> Isolatoren & Metallrohre einplanen</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 2: Wirtschaftlichkeitsanalyse -->
+        <div id="analysis-tab" class="tab-content">
+            <div class="header">
+                <h1><span style="cursor: pointer; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#60a5fa'" onmouseout="this.style.color='inherit'" onclick="showAdminModal()">Wirtschaftlichkeitsanalyse</span></h1>
+                <p class="subtitle">Detaillierte Analyse für 850 kWp Küsten-Hotel</p>
+                <p class="specs">778.600 kWh Jahresertrag | 90% Eigenverbrauch | PVGIS-Daten</p>
+            </div>
+
+            <div class="content">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">📍</div>
+                        <h3 class="card-title">Standort & Technische Daten</h3>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Postleitzahl</label>
+                            <input type="text" class="form-input" value="23966" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Dachausrichtung</label>
+                            <input type="text" class="form-input" value="Ost-West (15° Aufständerung)" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Anlagenart</label>
+                            <input type="text" class="form-input" value="Überschusseinspeisung" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Spezifischer Ertrag</label>
+                            <input type="text" class="form-input" value="916 kWh/kWp" readonly>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">⚡</div>
+                        <h3 class="card-title">Energieverbrauch & Kosten</h3>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label" for="annual-consumption">Jahresverbrauch Hotel (kWh)</label>
+                            <input type="number" id="annual-consumption" class="form-input" value="3500000" min="0">
+                            <span class="form-hint">Realistisch: 2,5-6 Mio kWh für Hotels</span>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="electricity-price">Aktueller Strompreis (ct/kWh)</label>
+                            <input type="number" id="electricity-price" class="form-input" value="30.0" step="0.1" min="0">
+                            <span class="form-hint">Inkl. Netzentgelte, Umlagen, Steuern</span>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="energy-price-reduction">Energiepreis-Reduktion (ct/kWh)</label>
+                            <input type="number" id="energy-price-reduction" class="form-input" value="4.0" step="0.1" min="0">
+                            <span class="form-hint">Stadtwerke-Kooperation möglich</span>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="self-consumption-rate">Eigenverbrauchsquote (%)</label>
+                            <input type="number" id="self-consumption-rate" class="form-input" value="90" min="0" max="100" readonly>
+                            <span class="form-hint">Durch hohen Hotel-Dauerverbrauch</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">💰</div>
+                        <h3 class="card-title">Finanzierung</h3>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label" for="financing-type">Finanzierungsart</label>
+                            <select id="financing-type" class="form-select">
+                                <option value="cash">Barkauf (100% Eigenkapital)</option>
+                                <option value="loan-30" selected>30% Eigenkapital + 70% Kredit</option>
+                                <option value="loan-100">100% Finanzierung</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="interest-rate">Zinssatz (% p.a.)</label>
+                            <input type="number" id="interest-rate" class="form-input" value="4.5" step="0.1" min="0" max="20">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="loan-term">Laufzeit (Jahre)</label>
+                            <input type="number" id="loan-term" class="form-input" value="20" min="1" max="30">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">PV-Jahresertrag</label>
+                            <input type="text" class="form-input" value="778.600 kWh" readonly>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">📈</div>
+                        <h3 class="card-title">Wirtschaftlichkeitsanalyse</h3>
+                    </div>
+                    <div class="results-grid">
+                        <div class="result-card primary">
+                            <div class="result-label">PV-Jahresertrag</div>
+                            <div class="result-value" id="annual-yield">778.600 kWh</div>
+                        </div>
+                        <div class="result-card">
+                            <div class="result-label">Eigenverbrauch</div>
+                            <div class="result-value" id="self-consumption">700.740 kWh</div>
+                        </div>
+                        <div class="result-card success">
+                            <div class="result-label">Stromkosten-Ersparnis</div>
+                            <div class="result-value" id="electricity-savings">210.222 €</div>
+                        </div>
+                        <div class="result-card">
+                            <div class="result-label">Einspeisevergütung</div>
+                            <div class="result-value" id="feed-in-tariff">4.827 €</div>
+                        </div>
+                        <div class="result-card primary">
+                            <div class="result-label">PV-Ersparnis Gesamt</div>
+                            <div class="result-value" id="pv-total-savings">210.000 €</div>
+                        </div>
+                        <div class="result-card">
+                            <div class="result-label">Amortisation</div>
+                            <div class="result-value" id="pv-payback-time">2,5 Jahre</div>
+                        </div>
+                    </div>
+
+                    <div class="bonus-box">
+                        <div class="bonus-content">
+                            <h3 class="bonus-title">Zusätzlicher Stadtwerke-Bonus</h3>
+                            <div class="bonus-grid">
+                                <div class="bonus-item">
+                                    <div class="bonus-label">Pro Jahr:</div>
+                                    <div class="bonus-value" id="energy-reduction-savings">140.000 €</div>
+                                </div>
+                                <div class="bonus-item">
+                                    <div class="bonus-label">20 Jahre gesamt:</div>
+                                    <div class="bonus-value">2.800.000 €</div>
+                                </div>
+                            </div>
+                            <p class="bonus-description">
+                                <strong>Energiepreis-Reduktion von 16ct auf 12ct = 4ct Ersparnis × 3,5 Mio kWh</strong><br>
+                                Läuft parallel zur PV-Anlage und ist unabhängig davon!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="financing-grid">
+                    <div class="financing-card">
+                        <div class="financing-type">Barkauf</div>
+                        <div class="financing-investment" id="scenario-cash-investment">523.600 €</div>
+                        <div class="financing-label">Einmalige Investition</div>
+                        <div class="financing-metrics">
+                            <div class="financing-metric">
+                                <div class="metric-label">Amortisation</div>
+                                <div class="metric-value" id="scenario-cash-payback">2,5 Jahre</div>
+                            </div>
+                            <div class="financing-metric">
+                                <div class="metric-label">ROI (20J)</div>
+                                <div class="metric-value" id="scenario-cash-roi">703%</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="financing-card recommended">
+                        <div class="financing-type">30% EK + 70% Kredit</div>
+                        <div class="financing-investment" id="scenario-loan30-investment">157.080 €</div>
+                        <div class="financing-label">Eigenkapital-Einsatz</div>
+                        <div class="financing-metrics">
+                            <div class="financing-metric">
+                                <div class="metric-label">Amortisation</div>
+                                <div class="metric-value" id="scenario-loan30-payback">0,9 Jahre</div>
+                            </div>
+                            <div class="financing-metric">
+                                <div class="metric-label">ROI (20J)</div>
+                                <div class="metric-value" id="scenario-loan30-roi">1.900%</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="financing-card">
+                        <div class="financing-type">100% Finanzierung</div>
+                        <div class="financing-investment" id="scenario-loan100-investment">0 €</div>
+                        <div class="financing-label">Kein Eigenkapital</div>
+                        <div class="financing-metrics">
+                            <div class="financing-metric">
+                                <div class="metric-label">Cashflow positiv ab</div>
+                                <div class="metric-value" id="scenario-loan100-payback">Jahr 1</div>
+                            </div>
+                            <div class="financing-metric">
+                                <div class="metric-label">Gewinn (20J)</div>
+                                <div class="metric-value" id="scenario-loan100-roi">3.176.840 €</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="recommendation-box">
+                    <h3 class="recommendation-title">Empfehlung: 30% Eigenkapital optimal</h3>
+                    <div class="recommendation-grid">
+                        <div class="recommendation-item">
+                            <span class="recommendation-icon">✓</span>
+                            <span>Höchste Eigenkapital-Rendite (1.900% in 20 Jahren)</span>
+                        </div>
+                        <div class="recommendation-item">
+                            <span class="recommendation-icon">✓</span>
+                            <span>Steuerlicher Vorteil durch Zinsabzug</span>
+                        </div>
+                        <div class="recommendation-item">
+                            <span class="recommendation-icon">✓</span>
+                            <span>Liquidität für andere Projekte erhalten</span>
+                        </div>
+                        <div class="recommendation-item">
+                            <span class="recommendation-icon">✓</span>
+                            <span>Optimales Risiko-Rendite-Verhältnis</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-grid">
+                    <div class="info-box">
+                        <h4>EEG-Vergütung 2025</h4>
+                        <ul class="info-list">
+                            <li><strong>Überschusseinspeisung:</strong> 6,20 ct/kWh</li>
+                            <li><strong>Eigenverbrauch:</strong> 90% = 700.740 kWh/Jahr</li>
+                            <li><strong>PV-Ersparnis gesamt:</strong> 210.000 €/Jahr (inkl. Eigenverbrauch + Einspeisung)</li>
+                            <li><strong>Vergütungsdauer:</strong> 20 Jahre garantiert</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="info-box primary">
+                        <h4>Stadtwerke-Kooperation</h4>
+                        <ul class="info-list">
+                            <li><strong>Energiepreis-Reduktion:</strong> 4ct/kWh möglich</li>
+                            <li><strong>Zusätzliche Ersparnis:</strong> 140.000 €/Jahr</li>
+                            <li><strong>Langfristvertrag:</strong> 10-20 Jahre</li>
+                            <li><strong>Kombination:</strong> PV + günstiger Reststrom</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="info-box success">
+                        <h4>Optimierungspotenziale</h4>
+                        <ul class="info-list">
+                            <li><strong>Warmwasser-Puffer:</strong> +2-3% Eigenverbrauch</li>
+                            <li><strong>Pool-/SPA-Steuerung:</strong> +1-2% Eigenverbrauch</li>
+                            <li><strong>Lastmanagement:</strong> +1% Eigenverbrauch</li>
+                            <li><strong>E-Ladestationen:</strong> Zusatzeinnahmen möglich</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 3: Amortisationsrechnung -->
+        <div id="amortization-tab" class="tab-content">
+            <div class="header">
+                <h1>Amortisationsrechnung</h1>
+                <p class="subtitle">Detaillierte Wirtschaftlichkeitsberechnung</p>
+                <p class="specs">850 kWp PV-Anlage | 778.600 kWh/Jahr | Küsten-Hotel Wismar</p>
+            </div>
+
+            <div class="content">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">📊</div>
+                        <h3 class="card-title">Wirtschaftlichkeits-Kennzahlen</h3>
+                    </div>
+                    <div class="results-grid">
+                        <div class="result-card primary">
+                            <div class="result-label">Amortisation</div>
+                            <div class="result-value" id="amort-payback-time">2,5 Jahre</div>
+                        </div>
+                        <div class="result-card success">
+                            <div class="result-label">ROI (20 Jahre)</div>
+                            <div class="result-value" id="amort-roi-20">722%</div>
+                        </div>
+                        <div class="result-card">
+                            <div class="result-label">Investition</div>
+                            <div class="result-value" id="amort-investment">523.600 €</div>
+                        </div>
+                        <div class="result-card">
+                            <div class="result-label">Jährliche Ersparnis</div>
+                            <div class="result-value" id="amort-annual-savings">210.000 €</div>
+                        </div>
+                        <div class="result-card primary">
+                            <div class="result-label">Ertrag 20 Jahre</div>
+                            <div class="result-value" id="amort-total-return">4.200.000 €</div>
+                        </div>
+                        <div class="result-card success">
+                            <div class="result-label">Gewinn nach 20J</div>
+                            <div class="result-value" id="amort-net-profit">3.676.400 €</div>
+                        </div>
+                    </div>
+
+                    <div class="bonus-box" style="margin-top: 32px;">
+                        <div class="bonus-content">
+                            <h3 class="bonus-title">💯 GEWINN-GARANTIE</h3>
+                            <p style="font-size: 18px; margin: 20px 0; color: var(--gray-800);">
+                                <strong>Bei dieser Konstellation ist ein Verlust UNMÖGLICH!</strong>
+                            </p>
+                            <div style="text-align: left; max-width: 600px; margin: 0 auto;">
+                                <p style="margin-bottom: 12px;">✓ <strong>Feste Ersparnis:</strong> 210.000 €/Jahr garantiert</p>
+                                <p style="margin-bottom: 12px;">✓ <strong>Maximale Investition:</strong> 626.600 € (Worst Case)</p>
+                                <p style="margin-bottom: 12px;">✓ <strong>Break-Even:</strong> Spätestens nach 3 Jahren</p>
+                                <p style="margin-bottom: 12px;">✓ <strong>20 Jahre Ertrag:</strong> 4,2 Mio € (nur PV)</p>
+                                <p style="margin-bottom: 12px;">✓ <strong>Zusatz-Bonus:</strong> 2,8 Mio € (Stadtwerke)</p>
+                                <p style="font-weight: bold; color: var(--success); margin-top: 16px;">
+                                    → Mindestgewinn nach 20 Jahren: 3,5 Millionen Euro!
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Amortisationsverlauf über 20 Jahre</h3>
+                        <p class="chart-subtitle">Kumulierte Erträge vs. Investitionskosten</p>
+                    </div>
+                    <div class="chart-content" id="amortizationChart" style="min-height: 400px;">
+                        <!-- Chart will be generated here -->
+                    </div>
+                </div>
+
+                <div class="info-grid">
+                    <div class="info-box">
+                        <h4>Berechnungsgrundlagen</h4>
+                        <ul class="info-list">
+                            <li><strong>PV-Eigenverbrauch:</strong> 700.740 kWh × 30ct = 210.000 €/Jahr</li>
+                            <li><strong>Einspeisevergütung:</strong> Bereits in PV-Ersparnis enthalten</li>
+                            <li><strong>PV-Ersparnis gesamt:</strong> 210.000 €/Jahr (fest)</li>
+                            <li><strong>Stadtwerke-Bonus:</strong> 3,5 Mio kWh × 4ct = 140.000 €/Jahr</li>
+                            <li><strong>Degradation:</strong> 0,5% jährlich berücksichtigt</li>
+                            <li><strong>Wartung:</strong> 1% der Investition p.a.</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="info-box warning">
+                        <h4>Risiken & Sensitivitäten</h4>
+                        <ul class="info-list">
+                            <li><strong>Strompreisentwicklung:</strong> ±20% Schwankung möglich</li>
+                            <li><strong>Stadtwerke-Bonus:</strong> Vertragsabhängig</li>
+                            <li><strong>Technische Verfügbarkeit:</strong> 98% angenommen</li>
+                            <li><strong>Regulatorische Änderungen:</strong> EEG-Novellen</li>
+                            <li><strong>Wettervarianz:</strong> ±5% Jahresertrag</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="info-box success">
+                        <h4>Zusätzliche Vorteile</h4>
+                        <ul class="info-list">
+                            <li><strong>CO₂-Einsparung:</strong> ~400 Tonnen/Jahr</li>
+                            <li><strong>Imagegewinn:</strong> "Green Hotel" Marketing</li>
+                            <li><strong>Wertsteigerung:</strong> Immobilie mit PV</li>
+                            <li><strong>Strompreis-Hedge:</strong> Unabhängigkeit</li>
+                            <li><strong>Fördermöglichkeiten:</strong> KfW, BAFA prüfen</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 4: Normen & Compliance -->
+        <div id="normen-tab" class="tab-content">
+            <div class="header">
+                <h1>Normen & Compliance</h1>
+                <p class="subtitle">Rechtliche und technische Anforderungen</p>
+                <p class="specs">Mecklenburg-Vorpommern | Galvanische Trennung | Windzone 3</p>
+            </div>
+
+            <div class="content">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">⚖</div>
+                        <h3 class="card-title">Landesrecht Mecklenburg-Vorpommern</h3>
+                    </div>
+                    <div class="info-grid">
+                        <div class="info-box">
+                            <h4>LBauO M-V Bestimmungen</h4>
+                            <ul class="info-list">
+                                <li><strong>§ 2a:</strong> PV-Pflicht bei Neubauten</li>
+                                <li><strong>§ 15:</strong> Brandschutz Hotel (Sonderbau)</li>
+                                <li><strong>§ 61 Abs. 1 Nr. 3b:</strong> Dach-PV verfahrensfrei</li>
+                                <li><strong>Anzeigepflicht:</strong> Formlose Mitteilung an Bauaufsicht</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="info-box warning">
+                            <h4>Hotel-Brandschutz (MLAR)</h4>
+                            <ul class="info-list">
+                                <li><strong>MLAR-Standard:</strong> Kabeldurchführungen geschottet</li>
+                                <li><strong>DIN 14095:</strong> Aktualisierter Feuerwehrplan</li>
+                                <li><strong>Not-Aus-Schalter:</strong> Außen sichtbar angebracht</li>
+                                <li><strong>Zusatzkosten:</strong> ~3.300 € für MLAR-Compliance</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">💨</div>
+                        <h3 class="card-title">Wind & Statik</h3>
+                    </div>
+                    <div class="info-grid">
+                        <div class="info-box primary">
+                            <h4>Windzone 3 Wismar</h4>
+                            <ul class="info-list">
+                                <li><strong>DIN EN 1991-1-4/NA:</strong> Windgeschw. bis 27,5 m/s</li>
+                                <li><strong>Ballastierung:</strong> 30-40kg Betonsteine pro Platz</li>
+                                <li><strong>Windgutachten:</strong> 7.000 € für Berechnung</li>
+                                <li><strong>Profitec-Prüfung:</strong> Windlast-Zertifizierung</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="info-box">
+                            <h4>Korrosionsschutz</h4>
+                            <ul class="info-list">
+                                <li><strong>DIN 50929-3:</strong> Korrosionsschutz Salzluft</li>
+                                <li><strong>VA-Schrauben:</strong> V4A-Edelstahl mandatory</li>
+                                <li><strong>Beschichtung:</strong> Doppelt verzinkt</li>
+                                <li><strong>Prüfintervall:</strong> Jährliche Sichtprüfung</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">⚡</div>
+                        <h3 class="card-title">Elektro & Blitzschutz</h3>
+                    </div>
+                    <div class="info-grid">
+                        <div class="info-box">
+                            <h4>VDE-Richtlinien</h4>
+                            <ul class="info-list">
+                                <li><strong>VDE-AR-N 4110:</strong> Anschluss Mittelspannung</li>
+                                <li><strong>VDE-AR-N 4120:</strong> PV-Anlagen Technische Regeln</li>
+                                <li><strong>DIN VDE 0100-712:</strong> PV-Stromversorgung</li>
+                                <li><strong>DIN EN 62446-1:</strong> Erstprüfung mandatory</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="info-box warning">
+                            <h4>Galvanische Trennung</h4>
+                            <ul class="info-list">
+                                <li><strong>Isolierte UK:</strong> Keine Erdung, Kunststofffüße</li>
+                                <li><strong>Metallrohr:</strong> Durchgehend abgeschirmt</li>
+                                <li><strong>SPD Typ 1+2:</strong> Je Wechselrichter</li>
+                                <li><strong>Kennzeichnung:</strong> "Galvanisch getrennt"</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Technisches Schaubild Galvanische Trennung -->
+                    <div class="card" style="margin-top: 24px; background: var(--gray-50);">
+                        <div class="card-header">
+                            <div class="card-icon">📐</div>
+                            <h3 class="card-title">VDE 0185 - Technische Umsetzung Galvanische Trennung</h3>
+                        </div>
+                        <div style="text-align: center; padding: 24px;">
+                            <svg viewBox="0 0 600 500" style="max-width: 100%; height: auto;">
+                                <!-- Hintergrund -->
+                                <rect x="0" y="0" width="600" height="500" fill="white"/>
+                                
+                                <!-- Titel -->
+                                <text x="300" y="30" text-anchor="middle" font-size="20" font-weight="bold" fill="#111827">
+                                    VDE 0185, Galvanische Trennung
+                                </text>
+                                
+                                <!-- PV Module -->
+                                <g transform="translate(200, 80)">
+                                    <!-- Modul-Rahmen -->
+                                    <rect x="0" y="0" width="200" height="120" fill="#e0f2fe" stroke="#0284c7" stroke-width="2"/>
+                                    <!-- Solar-Zellen Grid -->
+                                    <path d="M 20 20 h 160 M 20 40 h 160 M 20 60 h 160 M 20 80 h 160 M 20 100 h 160
+                                             M 40 20 v 80 M 80 20 v 80 M 120 20 v 80 M 160 20 v 80" 
+                                          stroke="#0284c7" stroke-width="1" fill="none"/>
+                                    <text x="100" y="-10" text-anchor="middle" font-size="16" fill="#111827">PV Module</text>
+                                </g>
+                                
+                                <!-- Blitze -->
+                                <g transform="translate(120, 100)">
+                                    <path d="M 0 0 L 20 -20 L 10 -20 L 30 -40" stroke="#f97316" stroke-width="3" fill="none"/>
+                                    <path d="M 30 10 L 50 -10 L 40 -10 L 60 -30" stroke="#f97316" stroke-width="3" fill="none"/>
+                                </g>
+                                
+                                <!-- Aluminium-Isolation-Montage -->
+                                <rect x="180" y="220" width="240" height="20" fill="#10b981" stroke="#059669" stroke-width="2"/>
+                                <text x="120" y="235" text-anchor="end" font-size="14" fill="#111827">Aluminium-</text>
+                                <text x="100" y="255" text-anchor="end" font-size="14" fill="#111827">Isolation-Mon-</text>
+                                <text x="120" y="275" text-anchor="end" font-size="14" fill="#111827">tage</text>
+                                
+                                <!-- Unterkonstruktion -->
+                                <line x1="250" y1="200" x2="250" y2="220" stroke="#374151" stroke-width="3"/>
+                                <line x1="350" y1="200" x2="350" y2="220" stroke="#374151" stroke-width="3"/>
+                                
+                                <!-- DC Kabel von Modulen -->
+                                <line x1="300" y1="200" x2="300" y2="280" stroke="#374151" stroke-width="3"/>
+                                <text x="320" y="215" font-size="14" fill="#111827">DC Kabel</text>
+                                
+                                <!-- Metallische Leitung -->
+                                <rect x="280" y="240" width="40" height="40" fill="none" stroke="#374151" stroke-width="2"/>
+                                <text x="340" y="260" font-size="14" fill="#111827">Metallisch</text>
+                                <text x="340" y="280" font-size="14" fill="#111827">Leitung</text>
+                                
+                                <!-- SPD Typ 1+2 -->
+                                <g transform="translate(250, 300)">
+                                    <rect x="0" y="0" width="100" height="60" fill="#f3f4f6" stroke="#374151" stroke-width="2"/>
+                                    <path d="M 30 20 L 50 20 L 40 40 L 60 40" stroke="#374151" stroke-width="2" fill="none"/>
+                                    <text x="50" y="35" text-anchor="middle" font-size="12" fill="#111827">SPD1+2</text>
+                                    <text x="120" y="35" font-size="14" fill="#111827">SPD Typ1+2</text>
+                                </g>
+                                
+                                <!-- Metall-Leitung -->
+                                <line x1="150" y1="330" x2="250" y2="330" stroke="#374151" stroke-width="3"/>
+                                <text x="100" y="335" text-anchor="end" font-size="14" fill="#111827">Metall-Leitung</text>
+                                
+                                <!-- Inverter -->
+                                <g transform="translate(250, 380)">
+                                    <rect x="0" y="0" width="100" height="60" fill="#f3f4f6" stroke="#374151" stroke-width="2"/>
+                                    <path d="M 20 30 Q 30 20, 40 30 T 60 30 T 80 30" stroke="#374151" stroke-width="2" fill="none"/>
+                                    <text x="50" y="50" text-anchor="middle" font-size="14" fill="#111827">Inverter</text>
+                                </g>
+                                
+                                <!-- DC Kabel zum SPD -->
+                                <line x1="300" y1="280" x2="300" y2="300" stroke="#374151" stroke-width="3"/>
+                                <text x="320" y="290" font-size="14" fill="#111827">DC Kabel</text>
+                                
+                                <!-- Verbindung SPD zu Inverter -->
+                                <line x1="300" y1="360" x2="300" y2="380" stroke="#374151" stroke-width="3"/>
+                                
+                                <!-- Erdung Inverter -->
+                                <line x1="300" y1="440" x2="300" y2="460" stroke="#374151" stroke-width="3"/>
+                                <line x1="285" y1="460" x2="315" y2="460" stroke="#374151" stroke-width="2"/>
+                                <line x1="290" y1="465" x2="310" y2="465" stroke="#374151" stroke-width="2"/>
+                                <line x1="295" y1="470" x2="305" y2="470" stroke="#374151" stroke-width="2"/>
+                                
+                                <!-- Vorhandene Blitzschutzanlage -->
+                                <line x1="450" y1="100" x2="450" y2="470" stroke="#f97316" stroke-width="3"/>
+                                <text x="470" y="120" font-size="14" fill="#111827">Vorhandene</text>
+                                <text x="470" y="140" font-size="14" fill="#111827">Blitzschutz-</text>
+                                <text x="470" y="160" font-size="14" fill="#111827">Anlage</text>
+                                
+                                <!-- Vorhandene LPS -->
+                                <line x1="350" y1="410" x2="450" y2="410" stroke="#374151" stroke-width="3"/>
+                                <text x="470" y="380" font-size="14" fill="#111827">Vorhandene</text>
+                                <text x="470" y="400" font-size="14" fill="#111827">LPS</text>
+                                
+                                <!-- Erdung Blitzschutz -->
+                                <line x1="430" y1="470" x2="470" y2="470" stroke="#f97316" stroke-width="3"/>
+                                <line x1="435" y1="475" x2="465" y2="475" stroke="#f97316" stroke-width="2"/>
+                                <line x1="440" y1="480" x2="460" y2="480" stroke="#f97316" stroke-width="2"/>
+                                
+                                <text x="300" y="490" text-anchor="middle" font-size="14" fill="#111827">Vorhandene Blitzschutz</text>
+                                
+                                <!-- Legende -->
+                                <g transform="translate(20, 400)">
+                                    <rect x="0" y="0" width="150" height="80" fill="none" stroke="#e5e7eb" stroke-width="1" rx="5"/>
+                                    <text x="75" y="20" text-anchor="middle" font-size="14" font-weight="bold" fill="#111827">Wichtig:</text>
+                                    <text x="10" y="40" font-size="12" fill="#111827">• Keine direkte Erdung</text>
+                                    <text x="10" y="55" font-size="12" fill="#111827">• Isolierte Montage</text>
+                                    <text x="10" y="70" font-size="12" fill="#111827">• SPD-Schutz obligatorisch</text>
+                                </g>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">✓</div>
+                        <h3 class="card-title">Projekt-Checkliste</h3>
+                    </div>
+                    
+                    <div class="checklist-container">
+                        <div class="checklist-progress">
+                            <h4>Projektfortschritt</h4>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="checklist-progress"></div>
+                            </div>
+                            <p><span id="checked-count">0</span> von <span id="total-count">12</span> Aufgaben erledigt (<span id="progress-percent">0%</span>)</p>
+                        </div>
+
+                        <div class="checklist-section">
+                            <h4>Phase 1: Planung & Genehmigung</h4>
+                            
+                            <div class="checklist-item">
+                                <div class="checklist-checkbox" onclick="toggleCheckbox(this)">
+                                    <span style="display: none;">✓</span>
+                                </div>
+                                <div class="checklist-content">
+                                    <div class="checklist-title">Formlose Anzeige bei Bauaufsicht Wismar</div>
+                                    <div class="checklist-description">§ 61 LBauO M-V: Verfahrensfreies PV-Vorhaben anzeigen</div>
+                                </div>
+                            </div>
+
+                            <div class="checklist-item">
+                                <div class="checklist-checkbox" onclick="toggleCheckbox(this)">
+                                    <span style="display: none;">✓</span>
+                                </div>
+                                <div class="checklist-content">
+                                    <div class="checklist-title">Windzone 3 Statik erstellen</div>
+                                    <div class="checklist-description">DIN EN 1991-1-4/NA: Ballastplan mit 30-40kg pro Modulplatz</div>
+                                </div>
+                            </div>
+
+                            <div class="checklist-item">
+                                <div class="checklist-checkbox" onclick="toggleCheckbox(this)">
+                                    <span style="display: none;">✓</span>
+                                </div>
+                                <div class="checklist-content">
+                                    <div class="checklist-title">Netzanschluss-Antrag WEMAG</div>
+                                    <div class="checklist-description">VDE-AR-N 4110: Mittelspannungsanschluss beantragen</div>
+                                </div>
+                            </div>
+
+                            <div class="checklist-item">
+                                <div class="checklist-checkbox" onclick="toggleCheckbox(this)">
+                                    <span style="display: none;">✓</span>
+                                </div>
+                                <div class="checklist-content">
+                                    <div class="checklist-title">Feuerwehrplan aktualisieren</div>
+                                    <div class="checklist-description">DIN 14095: PV-Anlage eintragen, Not-Aus markieren</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="checklist-section">
+                            <h4>Phase 2: Installation</h4>
+                            
+                            <div class="checklist-item">
+                                <div class="checklist-checkbox" onclick="toggleCheckbox(this)">
+                                    <span style="display: none;">✓</span>
+                                </div>
+                                <div class="checklist-content">
+                                    <div class="checklist-title">UK isoliert montieren</div>
+                                    <div class="checklist-description">Kunststofffüße verwenden, keine Erdung</div>
+                                </div>
+                            </div>
+
+                            <div class="checklist-item">
+                                <div class="checklist-checkbox" onclick="toggleCheckbox(this)">
+                                    <span style="display: none;">✓</span>
+                                </div>
+                                <div class="checklist-content">
+                                    <div class="checklist-title">Kabelverlegung im Metallrohr</div>
+                                    <div class="checklist-description">EMV-Schutz durchgehend gewährleisten</div>
+                                </div>
+                            </div>
+
+                            <div class="checklist-item">
+                                <div class="checklist-checkbox" onclick="toggleCheckbox(this)">
+                                    <span style="display: none;">✓</span>
+                                </div>
+                                <div class="checklist-content">
+                                    <div class="checklist-title">SPD Typ 1+2 installieren</div>
+                                    <div class="checklist-description">Pro Wechselrichter Überspannungsschutz</div>
+                                </div>
+                            </div>
+
+                            <div class="checklist-item">
+                                <div class="checklist-checkbox" onclick="toggleCheckbox(this)">
+                                    <span style="display: none;">✓</span>
+                                </div>
+                                <div class="checklist-content">
+                                    <div class="checklist-title">VA-Materialien verwenden</div>
+                                    <div class="checklist-description">V4A-Edelstahl für Küsten-Korrosionsschutz</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="checklist-section">
+                            <h4>Phase 3: Abnahme</h4>
+                            
+                            <div class="checklist-item">
+                                <div class="checklist-checkbox" onclick="toggleCheckbox(this)">
+                                    <span style="display: none;">✓</span>
+                                </div>
+                                <div class="checklist-content">
+                                    <div class="checklist-title">Erstprüfung VDE 0100-600</div>
+                                    <div class="checklist-description">Elektrische Erstprüfung durchführen</div>
+                                </div>
+                            </div>
+
+                            <div class="checklist-item">
+                                <div class="checklist-checkbox" onclick="toggleCheckbox(this)">
+                                    <span style="display: none;">✓</span>
+                                </div>
+                                <div class="checklist-content">
+                                    <div class="checklist-title">Konformitätserklärung</div>
+                                    <div class="checklist-description">VDE-AR-N 4110 Zertifizierung</div>
+                                </div>
+                            </div>
+
+                            <div class="checklist-item">
+                                <div class="checklist-checkbox" onclick="toggleCheckbox(this)">
+                                    <span style="display: none;">✓</span>
+                                </div>
+                                <div class="checklist-content">
+                                    <div class="checklist-title">Kennzeichnung anbringen</div>
+                                    <div class="checklist-description">"Galvanisch getrennt" sichtbar markieren</div>
+                                </div>
+                            </div>
+
+                            <div class="checklist-item">
+                                <div class="checklist-checkbox" onclick="toggleCheckbox(this)">
+                                    <span style="display: none;">✓</span>
+                                </div>
+                                <div class="checklist-content">
+                                    <div class="checklist-title">Betriebsbuch übergeben</div>
+                                    <div class="checklist-description">Wartungsplan und VdS-Konzept bereitstellen</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            Erstellt: Dezember 2024 | PV-Anlage Küsten-Hotel | Alle Preise netto zzgl. MwSt. | Stand: EEG 2025
+        </div>
+    </div>
+
+    <!-- Admin Modal -->
+    <div class="admin-modal" id="admin-modal">
+        <div class="admin-modal-content">
+            <h3>Admin-Zugang</h3>
+            <p>Passwort für Gewinn-Rechner eingeben:</p>
+            <input type="password" id="admin-password" placeholder="Passwort" maxlength="4">
+            <div class="admin-modal-buttons">
+                <button class="btn btn-primary" onclick="checkAdminPassword()">Zugang</button>
+                <button class="btn btn-secondary" onclick="hideAdminModal()">Abbrechen</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Constants
+        const originalStandardTotal = 420600;
+        const originalWorstTotal = 626600;
+        const kwp = 850;
+
+        // Admin functionality
+        function showAdminModal() {
+            document.getElementById('admin-modal').classList.add('show');
+            document.getElementById('admin-password').focus();
+        }
+
+        function hideAdminModal() {
+            document.getElementById('admin-modal').classList.remove('show');
+            document.getElementById('admin-password').value = '';
+        }
+
+        function checkAdminPassword() {
+            const password = document.getElementById('admin-password').value;
+            if (password === '5656') {
+                hideAdminModal();
+                showProfitCalculator();
+            } else {
+                const input = document.getElementById('admin-password');
+                input.style.borderColor = '#ef4444';
+                setTimeout(() => {
+                    input.style.borderColor = '#d1d5db';
+                    input.value = '';
+                }, 1000);
+            }
+        }
+
+        function showProfitCalculator() {
+            document.getElementById('profit-calculator').style.display = 'block';
+        }
+
+        function hideProfitCalculator() {
+            document.getElementById('profit-calculator').style.display = 'none';
+        }
+
+        // Clear profit and remove from localStorage
+        function clearProfit() {
+            document.getElementById('profit').value = 0;
+            try {
+                localStorage.removeItem('pvAnlageGewinn');
+            } catch (e) {
+                console.log('LocalStorage nicht verfügbar');
+            }
+            // Verstecke Indikator
+            const indicator = document.getElementById('profit-indicator');
+            if (indicator) indicator.style.display = 'none';
+            updatePrices();
+        }
+
+        // Tab switching
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.classList.remove('active');
+            });
+            
+            document.getElementById(tabName + '-tab').classList.add('active');
+            event.target.classList.add('active');
+            
+            // Charts neu zeichnen beim Tab-Wechsel
+            if (tabName === 'amortization') {
+                setTimeout(() => {
+                    updateAnalysisCalculations();
+                    // Explizit Amortisationschart neu zeichnen
+                    const profitPerKwp = parseFloat(document.getElementById('profit')?.value) || 0;
+                    const totalProfit = profitPerKwp * kwp;
+                    const avgOriginal = (originalStandardTotal + originalWorstTotal) / 2;
+                    const profitPercent = avgOriginal > 0 ? (totalProfit / avgOriginal) * 100 : 0;
+                    const profitMultiplier = 1 + (profitPercent / 100);
+                    const totalInvestment = Math.round(avgOriginal * profitMultiplier);
+                    createAmortizationChart(totalInvestment, 210000);
+                }, 100);
+            }
+            
+            if (tabName === 'costs') {
+                setTimeout(() => {
+                    createCostChart();
+                }, 100);
+            }
+        }
+
+        // Profit calculator
+        function updatePrices() {
+            const profitPerKwp = parseFloat(document.getElementById('profit').value) || 0;
+            const totalProfit = profitPerKwp * kwp;
+            
+            // Speichere Gewinn in localStorage
+            try {
+                if (profitPerKwp > 0) {
+                    localStorage.setItem('pvAnlageGewinn', profitPerKwp);
+                    // Zeige Indikator
+                    const indicator = document.getElementById('profit-indicator');
+                    if (indicator) indicator.style.display = 'block';
+                } else {
+                    localStorage.removeItem('pvAnlageGewinn');
+                    // Verstecke Indikator
+                    const indicator = document.getElementById('profit-indicator');
+                    if (indicator) indicator.style.display = 'none';
+                }
+            } catch (e) {
+                console.log('LocalStorage nicht verfügbar');
+            }
+            
+            const avgOriginal = (originalStandardTotal + originalWorstTotal) / 2;
+            const profitPercent = avgOriginal > 0 ? (totalProfit / avgOriginal) * 100 : 0;
+            const profitMultiplier = 1 + (profitPercent / 100);
+
+            // Update all prices
+            document.querySelectorAll('.price[data-base]').forEach(element => {
+                const basePrice = parseFloat(element.getAttribute('data-base'));
+                const newPrice = Math.round(basePrice * profitMultiplier);
+                element.textContent = new Intl.NumberFormat('de-DE').format(newPrice) + ' €';
+                
+                if (profitPerKwp > 0) {
+                    element.classList.add('updated');
+                } else {
+                    element.classList.remove('updated');
+                }
+            });
+
+            // Update totals
+            const newStandardTotal = Math.round(originalStandardTotal * profitMultiplier);
+            const newWorstTotal = Math.round(originalWorstTotal * profitMultiplier);
+            const newAvgTotal = Math.round((newStandardTotal + newWorstTotal) / 2);
+
+            document.getElementById('standard-total').textContent = new Intl.NumberFormat('de-DE').format(newStandardTotal) + ' €';
+            document.getElementById('worst-total').textContent = new Intl.NumberFormat('de-DE').format(newWorstTotal) + ' €';
+            
+            document.getElementById('standard-per-kwp').textContent = Math.round(newStandardTotal / kwp) + ' € pro kWp';
+            document.getElementById('worst-per-kwp').textContent = Math.round(newWorstTotal / kwp) + ' € pro kWp';
+
+            document.getElementById('overview-standard').textContent = new Intl.NumberFormat('de-DE').format(newStandardTotal) + ' €';
+            document.getElementById('overview-worst').textContent = new Intl.NumberFormat('de-DE').format(newWorstTotal) + ' €';
+            
+            document.getElementById('overview-standard-kwp').textContent = Math.round(newStandardTotal / kwp) + ' €/kWp';
+            document.getElementById('overview-worst-kwp').textContent = Math.round(newWorstTotal / kwp) + ' €/kWp';
+
+            const costRange = newWorstTotal - newStandardTotal;
+            const costFactor = newWorstTotal / newStandardTotal;
+            document.getElementById('cost-range').textContent = new Intl.NumberFormat('de-DE').format(costRange) + ' €';
+            document.getElementById('cost-factor').textContent = costFactor.toFixed(2);
+
+            // Update profit calculator display
+            document.getElementById('total-profit').textContent = new Intl.NumberFormat('de-DE').format(totalProfit) + ' €';
+            document.getElementById('profit-percent').textContent = profitPercent.toFixed(1) + '%';
+            document.getElementById('selling-price').textContent = new Intl.NumberFormat('de-DE').format(newAvgTotal) + ' €';
+
+            updateCharts();
+            updateAnalysisCalculations();
+        }
+
+        // Analysis calculations
+        function updateAnalysisCalculations() {
+            try {
+                const financingType = document.getElementById('financing-type')?.value || 'loan-30';
+                const interestRate = parseFloat(document.getElementById('interest-rate')?.value) || 4.5;
+                const loanTerm = parseFloat(document.getElementById('loan-term')?.value) || 20;
+                const electricityPrice = parseFloat(document.getElementById('electricity-price')?.value) || 30.0;
+                const energyReduction = parseFloat(document.getElementById('energy-price-reduction')?.value) || 4.0;
+                const hotelConsumption = parseFloat(document.getElementById('annual-consumption')?.value) || 3500000;
+
+                // Fixed values
+                const annualPVYield = 778600;
+                const selfConsumptionRate = 0.90;
+                const feedInRate = 0.062;
+                
+                const selfConsumption = Math.round(annualPVYield * selfConsumptionRate);
+                const feedIn = annualPVYield - selfConsumption;
+                const annualFeedInRevenue = Math.round(feedIn * feedInRate);
+                const electricitySavings = Math.round(selfConsumption * electricityPrice / 100);
+                // Korrigiert auf 210.000 € pro Jahr
+                const pvOnlySavings = 210000; // Feste PV-Ersparnis pro Jahr
+                
+                // Stadtwerke bonus (separate)
+                const energyReductionSavings = Math.round(hotelConsumption * energyReduction / 100);
+                const totalAnnualSavings = pvOnlySavings + energyReductionSavings;
+                
+                // Investment with profit margin
+                const profitPerKwp = parseFloat(document.getElementById('profit')?.value) || 0;
+                const totalProfit = profitPerKwp * kwp;
+                const avgOriginal = (originalStandardTotal + originalWorstTotal) / 2;
+                const profitPercent = avgOriginal > 0 ? (totalProfit / avgOriginal) * 100 : 0;
+                const profitMultiplier = 1 + (profitPercent / 100);
+                const totalInvestment = Math.round(avgOriginal * profitMultiplier);
+                
+                // Calculate amortization WITH stadtwerke bonus for display
+                const paybackTimeWithBonus = totalInvestment / totalAnnualSavings;
+                // Calculate amortization WITHOUT stadtwerke bonus for PV-only
+                const paybackTimePVOnly = totalInvestment / pvOnlySavings;
+                const totalReturn20Years = pvOnlySavings * 20; // PV-only for 20 years
+                const roi20 = ((totalReturn20Years - totalInvestment) / totalInvestment) * 100;
+
+                // Update displays
+                const elements = {
+                    'annual-yield': new Intl.NumberFormat('de-DE').format(annualPVYield) + ' kWh',
+                    'self-consumption': new Intl.NumberFormat('de-DE').format(selfConsumption) + ' kWh',
+                    'electricity-savings': new Intl.NumberFormat('de-DE').format(electricitySavings) + ' €',
+                    'feed-in-tariff': new Intl.NumberFormat('de-DE').format(annualFeedInRevenue) + ' €',
+                    'energy-reduction-savings': new Intl.NumberFormat('de-DE').format(energyReductionSavings) + ' €',
+                    'pv-total-savings': '210.000 €', // Fester Wert
+                    'pv-payback-time': paybackTimePVOnly.toFixed(1) + ' Jahre',
+                    'amort-payback-time': paybackTimePVOnly.toFixed(1) + ' Jahre',
+                    'amort-roi-20': Math.round(roi20) + '%',
+                    'amort-investment': new Intl.NumberFormat('de-DE').format(totalInvestment) + ' €',
+                    'amort-annual-savings': '210.000 €', // Fester Wert
+                    'amort-total-return': new Intl.NumberFormat('de-DE').format(pvOnlySavings * 20) + ' €',
+                    'amort-net-profit': new Intl.NumberFormat('de-DE').format(pvOnlySavings * 20 - totalInvestment) + ' €',
+                    'amort-energy-bonus': new Intl.NumberFormat('de-DE').format(energyReductionSavings * 20) + ' €'
+                };
+
+                Object.keys(elements).forEach(id => {
+                    const element = document.getElementById(id);
+                    if (element) {
+                        element.textContent = elements[id];
+                    }
+                });
+
+                updateFinancingScenarios(totalInvestment, pvOnlySavings, interestRate, loanTerm);
+                createAmortizationChart(totalInvestment, pvOnlySavings);
+            } catch (error) {
+                console.error('Error in calculations:', error);
+            }
+        }
+
+        function updateFinancingScenarios(investment, annualSavings, interestRate, loanTerm) {
+            // Scenario 1: Cash
+            const cashPayback = investment / annualSavings;
+            const cashROI = ((annualSavings * 20 - investment) / investment) * 100;
+            
+            // Scenario 2: 30% EK + 70% Loan
+            const loan30Amount = investment * 0.7;
+            const loan30EK = investment * 0.3;
+            const monthlyRate = interestRate / 100 / 12;
+            const numPayments = loanTerm * 12;
+            
+            const loan30Monthly = monthlyRate > 0 
+                ? loan30Amount * (monthlyRate * Math.pow(1 + monthlyRate, numPayments)) / (Math.pow(1 + monthlyRate, numPayments) - 1)
+                : loan30Amount / numPayments;
+            
+            const loan30Annual = loan30Monthly * 12;
+            const loan30NetAnnual = annualSavings - loan30Annual;
+            const loan30Payback = loan30EK / loan30NetAnnual;
+            const loan30TotalPaid = loan30EK + (loan30Annual * loanTerm);
+            const loan30Profit = (annualSavings * 20) - loan30TotalPaid;
+            const loan30ROI = (loan30Profit / loan30EK) * 100;
+            
+            // Scenario 3: 100% Financing
+            const loan100Monthly = monthlyRate > 0
+                ? investment * (monthlyRate * Math.pow(1 + monthlyRate, numPayments)) / (Math.pow(1 + monthlyRate, numPayments) - 1)
+                : investment / numPayments;
+            
+            const loan100Annual = loan100Monthly * 12;
+            const loan100NetAnnual = annualSavings - loan100Annual;
+            const loan100TotalPaid = loan100Annual * loanTerm;
+            const loan100Profit = (annualSavings * 20) - loan100TotalPaid;
+            
+            // Update displays
+            const cashInvestmentEl = document.getElementById('scenario-cash-investment');
+            if (cashInvestmentEl) {
+                cashInvestmentEl.textContent = new Intl.NumberFormat('de-DE').format(investment) + ' €';
+                document.getElementById('scenario-cash-payback').textContent = cashPayback.toFixed(1) + ' Jahre';
+                document.getElementById('scenario-cash-roi').textContent = Math.round(cashROI) + '%';
+                
+                document.getElementById('scenario-loan30-investment').textContent = new Intl.NumberFormat('de-DE').format(loan30EK) + ' €';
+                document.getElementById('scenario-loan30-payback').textContent = loan30Payback > 0 ? loan30Payback.toFixed(1) + ' Jahre' : 'Sofort';
+                document.getElementById('scenario-loan30-roi').textContent = Math.round(loan30ROI) + '%';
+                
+                document.getElementById('scenario-loan100-investment').textContent = '0 €';
+                document.getElementById('scenario-loan100-payback').textContent = loan100NetAnnual > 0 ? 'Jahr 1' : 'Nie';
+                document.getElementById('scenario-loan100-roi').textContent = new Intl.NumberFormat('de-DE').format(Math.round(loan100Profit)) + ' €';
+            }
+        }
+
+        // Chart functions
+        function createCostChart() {
+            const profitPerKwp = parseFloat(document.getElementById('profit')?.value) || 0;
+            const totalProfit = profitPerKwp * kwp;
+            const avgOriginal = (originalStandardTotal + originalWorstTotal) / 2;
+            const profitPercent = avgOriginal > 0 ? (totalProfit / avgOriginal) * 100 : 0;
+            const profitMultiplier = 1 + (profitPercent / 100);
+
+            const categories = ['UK', 'Module', 'WR', 'DC', 'AC', 'Kabel', 'Planung', 'Netz', 'Zert', 'Küste'];
+            const standardData = [68000, 106250, 19600, 59500, 51000, 8200, 30250, 40000, 15000, 20000].map(v => Math.round(v * profitMultiplier));
+            const worstData = [85000, 106250, 33600, 83500, 71000, 13000, 30250, 150000, 15000, 35000].map(v => Math.round(v * profitMultiplier));
+
+            const maxValue = Math.max(...worstData);
+            const chartContainer = document.getElementById('costChart');
+            
+            if (!chartContainer) return;
+
+            let html = '<div style="display: flex; align-items: flex-end; height: 100%; gap: 20px; padding: 20px;">';
+            
+            categories.forEach((cat, i) => {
+                const standardHeight = (standardData[i] / maxValue) * 100;
+                const worstHeight = (worstData[i] / maxValue) * 100;
+                
+                html += `
+                    <div style="flex: 1; display: flex; flex-direction: column; align-items: center;">
+                        <div style="display: flex; gap: 4px; height: 300px; align-items: flex-end;">
+                            <div style="width: 30px; height: ${standardHeight}%; background: #2563eb; border-radius: 4px 4px 0 0;" 
+                                 title="${cat} Standard: ${new Intl.NumberFormat('de-DE').format(standardData[i])} €"></div>
+                            <div style="width: 30px; height: ${worstHeight}%; background: #ef4444; border-radius: 4px 4px 0 0;"
+                                 title="${cat} Worst: ${new Intl.NumberFormat('de-DE').format(worstData[i])} €"></div>
+                        </div>
+                        <div style="margin-top: 8px; font-size: 12px; text-align: center;">${cat}</div>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            chartContainer.innerHTML = html;
+        }
+
+        function createAmortizationChart(investment, annualSavings) {
+            const chartContainer = document.getElementById('amortizationChart');
+            if (!chartContainer) return;
+
+            const years = 20;
+            const maxValue = Math.max(investment * 1.5, annualSavings * years);
+            
+            // SVG Chart erstellen
+            let svg = `
+                <svg width="100%" height="100%" viewBox="0 0 800 400" preserveAspectRatio="xMidYMid meet">
+                    <defs>
+                        <linearGradient id="earningsGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style="stop-color:#2563eb;stop-opacity:0.3" />
+                            <stop offset="100%" style="stop-color:#2563eb;stop-opacity:0.1" />
+                        </linearGradient>
+                    </defs>
+                    
+                    <!-- Hintergrund -->
+                    <rect x="0" y="0" width="800" height="400" fill="white"/>
+                    
+                    <!-- Y-Achse Gitterlinien -->
+            `;
+            
+            // Y-Achse Labels und Gitterlinien
+            for (let i = 0; i <= 5; i++) {
+                const y = 350 - (i * 300 / 5);
+                const value = (i * maxValue / 5);
+                svg += `
+                    <line x1="80" y1="${y}" x2="750" y2="${y}" stroke="#e5e7eb" stroke-width="1"/>
+                    <text x="70" y="${y + 5}" text-anchor="end" font-size="12" fill="#6b7280">
+                        ${(value/1000000).toFixed(1)}M €
+                    </text>
+                `;
+            }
+            
+            // X-Achse Labels
+            for (let i = 0; i <= 4; i++) {
+                const year = i * 5;
+                const x = 80 + (year / years * 670);
+                svg += `
+                    <line x1="${x}" y1="350" x2="${x}" y2="355" stroke="#e5e7eb" stroke-width="1"/>
+                    <text x="${x}" y="370" text-anchor="middle" font-size="12" fill="#6b7280">${year}</text>
+                `;
+            }
+            
+            // Achsen
+            svg += `
+                <line x1="80" y1="50" x2="80" y2="350" stroke="#374151" stroke-width="2"/>
+                <line x1="80" y1="350" x2="750" y2="350" stroke="#374151" stroke-width="2"/>
+            `;
+            
+            // Investitionslinie
+            const investmentY = 350 - (investment / maxValue * 300);
+            svg += `
+                <line x1="80" y1="${investmentY}" x2="750" y2="${investmentY}" 
+                      stroke="#ef4444" stroke-width="3" stroke-dasharray="10,5" opacity="0.8"/>
+                <text x="760" y="${investmentY + 5}" font-size="12" fill="#ef4444">Investition</text>
+            `;
+            
+            // Ertragskurve
+            let pathData = 'M 80 350';
+            let areaData = 'M 80 350';
+            
+            for (let year = 0; year <= years; year++) {
+                const x = 80 + (year / years * 670);
+                const earnings = year * annualSavings;
+                const y = 350 - (earnings / maxValue * 300);
+                pathData += ` L ${x} ${y}`;
+                areaData += ` L ${x} ${y}`;
+            }
+            
+            areaData += ' L 750 350 Z';
+            
+            svg += `
+                <path d="${areaData}" fill="url(#earningsGradient)" opacity="0.5"/>
+                <path d="${pathData}" fill="none" stroke="#2563eb" stroke-width="3"/>
+            `;
+            
+            // Amortisationspunkt
+            const amortYear = investment / annualSavings;
+            if (amortYear <= years) {
+                const amortX = 80 + (amortYear / years * 670);
+                svg += `
+                    <circle cx="${amortX}" cy="${investmentY}" r="6" fill="#10b981" stroke="white" stroke-width="2"/>
+                    <text x="${amortX}" y="${investmentY - 15}" text-anchor="middle" font-size="14" font-weight="bold" fill="#10b981">
+                        ${amortYear.toFixed(1)} Jahre
+                    </text>
+                `;
+            }
+            
+            // Legende
+            svg += `
+                <g transform="translate(550, 80)">
+                    <rect x="0" y="0" width="180" height="80" fill="white" stroke="#e5e7eb" rx="8"/>
+                    <line x1="10" y1="25" x2="40" y2="25" stroke="#2563eb" stroke-width="3"/>
+                    <text x="45" y="30" font-size="12" fill="#374151">Kumulierte Erträge</text>
+                    <line x1="10" y1="50" x2="40" y2="50" stroke="#ef4444" stroke-width="3" stroke-dasharray="5,3"/>
+                    <text x="45" y="55" font-size="12" fill="#374151">Investitionskosten</text>
+                </g>
+            `;
+            
+            // Titel
+            svg += `
+                <text x="400" y="30" text-anchor="middle" font-size="14" font-weight="bold" fill="#374151">
+                    Break-Even nach ${amortYear.toFixed(1)} Jahren
+                </text>
+            `;
+            
+            svg += '</svg>';
+            
+            chartContainer.innerHTML = svg;
+        }
+
+        function updateCharts() {
+            createCostChart();
+            // Korrigierte Werte für Amortisationschart
+            const profitPerKwp = parseFloat(document.getElementById('profit')?.value) || 0;
+            const totalProfit = profitPerKwp * kwp;
+            const avgOriginal = (originalStandardTotal + originalWorstTotal) / 2;
+            const profitPercent = avgOriginal > 0 ? (totalProfit / avgOriginal) * 100 : 0;
+            const profitMultiplier = 1 + (profitPercent / 100);
+            const totalInvestment = Math.round(avgOriginal * profitMultiplier);
+            
+            createAmortizationChart(totalInvestment, 210000); // Feste 210.000 € pro Jahr
+        }
+
+        // Checklist functionality
+        function toggleCheckbox(checkbox) {
+            checkbox.classList.toggle('checked');
+            const checkmark = checkbox.querySelector('span');
+            checkmark.style.display = checkbox.classList.contains('checked') ? 'block' : 'none';
+            updateChecklistProgress();
+        }
+
+        function updateChecklistProgress() {
+            const totalItems = document.querySelectorAll('.checklist-checkbox').length;
+            const checkedItems = document.querySelectorAll('.checklist-checkbox.checked').length;
+            const percentage = Math.round((checkedItems / totalItems) * 100);
+            
+            document.getElementById('checked-count').textContent = checkedItems;
+            document.getElementById('total-count').textContent = totalItems;
+            document.getElementById('progress-percent').textContent = percentage + '%';
+            document.getElementById('checklist-progress').style.width = percentage + '%';
+        }
+
+        // Load saved profit from localStorage
+        function loadSavedProfit() {
+            try {
+                const savedProfit = localStorage.getItem('pvAnlageGewinn');
+                if (savedProfit && document.getElementById('profit')) {
+                    const profitValue = parseFloat(savedProfit);
+        // Load saved profit from localStorage
+        function loadSavedProfit() {
+            try {
+                const savedProfit = localStorage.getItem('pvAnlageGewinn');
+                if (savedProfit && document.getElementById('profit')) {
+                    const profitValue = parseFloat(savedProfit);
+                    if (!isNaN(profitValue) && profitValue >= 0) {
+                        document.getElementById('profit').value = profitValue;
+                        
+                        // Zeige Profit Calculator wenn Gewinn gespeichert ist
+                        if (profitValue > 0) {
+                            // Indikator anzeigen
+                            const indicator = document.getElementById('profit-indicator');
+                            if (indicator) indicator.style.display = 'block';
+                        }
+                    }
+                }
+            } catch (e) {
+                console.log('LocalStorage nicht verfügbar');
+            }
+        }
+                }
+            } catch (e) {
+                console.log('LocalStorage nicht verfügbar');
+            }
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            const profitInput = document.getElementById('profit');
+            if (profitInput) {
+                profitInput.addEventListener('input', updatePrices);
+            }
+
+            const analysisInputs = [
+                'financing-type', 'interest-rate', 'loan-term', 
+                'electricity-price', 'energy-price-reduction', 'annual-consumption'
+            ];
+            
+            analysisInputs.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.addEventListener('input', updateAnalysisCalculations);
+                    element.addEventListener('change', updateAnalysisCalculations);
+                }
+            });
+
+            // Initialize
+            loadSavedProfit(); // Lade gespeicherten Gewinn
+            updatePrices(); // Aktualisiere Preise (auch wenn kein Gewinn gespeichert)
+            updateAnalysisCalculations();
+            updateCharts();
+            updateChecklistProgress();
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                hideAdminModal();
+                hideProfitCalculator();
+            }
+            if (e.key === 'Enter' && document.getElementById('admin-modal').classList.contains('show')) {
+                checkAdminPassword();
+            }
+        });
+    </script>
+</body>
+</html>
